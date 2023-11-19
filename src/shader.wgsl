@@ -1,18 +1,6 @@
 fn rand(uv: vec2<f32>) -> f32 {
-    return (fract(sin(dot(uv.xy, vec2(23.53, 44.0))) * 42350.45));
+    return fract(dot(uv.xy, vec2(23.53, 44.0)) * 40000.0);
 }
-
-fn noise(uv: vec2<f32>) -> f32 {
-    let i: vec2<f32> = floor(uv);
-    let j: vec2<f32> = fract(uv);
-    let blur: vec2<f32> = smoothstep(vec2<f32>(0.0, 0.0), vec2<f32>(1.0, 1.0), j);
-
-    let a: f32 = rand(i);
-    let b: f32 = rand(i + vec2<f32>(1.0, 0.0));
-
-    return mix(a, b, blur.x);
-}
-
 
 struct VertexInput {
     @builtin(vertex_index) vertex_index: u32,
@@ -33,6 +21,8 @@ fn vs_main(in: VertexInput) -> @builtin(position) vec4<f32> {
 
 @fragment
 fn fs_main(@builtin(position) pos: vec4<f32>) -> @location(0) vec4<f32> {
-    let uv = pos.yx * 10.0 / 512.0;
-    return vec4<f32>(vec3<f32>(1.0) * noise(uv), 1.0);
+    let sections = 10.0;
+    let uv = pos.xy / 512.0;
+    let sectioned_uv = uv * sections;
+    return vec4<f32>(vec3<f32>(rand(floor(sectioned_uv))), 1.0);
 }

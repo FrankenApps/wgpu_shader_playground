@@ -5,7 +5,7 @@ use winit::{
     window::Window,
 };
 
-const VIEWPORT_SIZE: u32 = 512;
+pub const VIEWPORT_SIZE: u32 = 512;
 
 /// Asynchronously runs the [EventLoop].
 ///
